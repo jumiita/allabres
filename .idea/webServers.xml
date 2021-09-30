@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="4733b7c0-02d5-4537-9030-d6660ed1fb31" name="Local" url="http://localhost/dawsonferrer/allabres">
+        <fileTransfer mountedRoot="C:\xampp\htdocs\dawsonferrer\allabres" accessType="MOUNT" port="0" />
+      </webServer>
+      <webServer id="cb8395e7-16e0-4348-bcbe-4e62dbedea1d" name="dawsonferrer" url="http://allabres.dawsonferrer.com">
+        <fileTransfer host="ftp.dawsonferrer.com" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
