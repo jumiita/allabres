@@ -1,5 +1,5 @@
 <?php
-$contents = file_get_contents("https://dawsonferrer.com/allabres/apis_solutions/world.php");
+$contents = file_get_contents("https://dawsonferrer.com/allabres/apis_solutions/world.php?data=world");
 $world = json_decode($contents, true);
 
 function getUnsortedCities($world){
