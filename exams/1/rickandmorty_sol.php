@@ -9,16 +9,13 @@ $locations = json_decode(file_get_contents($api_url . "locations"), true);
 
 function getSortedCharactersById($characters)
 {
-    $count = 0;
     for ($i = 0; $i < count($characters); $i++) {
-        for ($j = 0; $j < count($characters); $j++) {
-            if (intval($characters[$i]["id"]) < intval($characters[$j]["id"])) {
+        for ($j = $i; $j < count($characters); $j++) {
+            if (intval($characters[$i]["id"]) > intval($characters[$j]["id"])) {
                 $temp = $characters[$i];
                 $characters[$i] = $characters[$j];
                 $characters[$j] = $temp;
             }
-            $count++;
-            echo ($count).": (".implode(",",array_column($characters, "id")).");<br>";
         }
     }
     return $characters;
@@ -27,8 +24,8 @@ function getSortedCharactersById($characters)
 function getSortedCharactersByOrigin($characters)
 {
     for ($i = 0; $i < count($characters); $i++) {
-        for ($j = 0; $j < count($characters); $j++) {
-            if ($characters[$i]["origin"] < $characters[$j]["origin"]) {
+        for ($j = $i; $j < count($characters); $j++) {
+            if ($characters[$i]["origin"] > $characters[$j]["origin"]) {
                 $temp = $characters[$i];
                 $characters[$i] = $characters[$j];
                 $characters[$j] = $temp;
@@ -41,8 +38,8 @@ function getSortedCharactersByOrigin($characters)
 function getSortedCharactersByStatus($characters)
 {
     for ($i = 0; $i < count($characters); $i++) {
-        for ($j = 0; $j < count($characters); $j++) {
-            if ($characters[$i]["status"] == "Alive" && $characters[$j]["status"] != "Alive") {
+        for ($j = $i; $j < count($characters); $j++) {
+            if ($characters[$i]["status"] != "Alive" && $characters[$j]["status"] == "Alive") {
                 $temp = $characters[$i];
                 $characters[$i] = $characters[$j];
                 $characters[$j] = $temp;
@@ -51,8 +48,8 @@ function getSortedCharactersByStatus($characters)
     }
 
     for ($i = 0; $i < count($characters); $i++) {
-        for ($j = 0; $j < count($characters); $j++) {
-            if ($characters[$i]["status"] == "Dead" && $characters[$j]["status"] == "unknown") {
+        for ($j = $i; $j < count($characters); $j++) {
+            if ($characters[$i]["status"] == "unknown" && $characters[$j]["status"] == "Dead") {
                 $temp = $characters[$i];
                 $characters[$i] = $characters[$j];
                 $characters[$j] = $temp;
@@ -66,8 +63,8 @@ function getSortedCharactersByStatus($characters)
 function getSortedLocationsById($locations)
 {
     for ($i = 0; $i < count($locations); $i++) {
-        for ($j = 0; $j < count($locations); $j++) {
-            if (intval($locations[$i]["id"]) < intval($locations[$j]["id"])) {
+        for ($j = $i; $j < count($locations); $j++) {
+            if (intval($locations[$i]["id"]) > intval($locations[$j]["id"])) {
                 $temp = $locations[$i];
                 $locations[$i] = $locations[$j];
                 $locations[$j] = $temp;
@@ -81,8 +78,8 @@ function getSortedLocationsById($locations)
 function getSortedEpisodesById($episodes)
 {
     for ($i = 0; $i < count($episodes); $i++) {
-        for ($j = 0; $j < count($episodes); $j++) {
-            if (intval($episodes[$i]["id"]) < intval($episodes[$j]["id"])) {
+        for ($j = $i; $j < count($episodes); $j++) {
+            if (intval($episodes[$i]["id"]) > intval($episodes[$j]["id"])) {
                 $temp = $episodes[$i];
                 $episodes[$i] = $episodes[$j];
                 $episodes[$j] = $temp;
@@ -177,7 +174,7 @@ $mappedCharacters = mapCharacters($characters);
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <form class="d-flex" action="rickandmorty.php">
+            <form class="d-flex" action="rickandmorty_sol.php">
                 <select class="form-control me-2 form-select" aria-label="Sorting criteria" name="sortingCriteria">
                     <option <?php echo($sortingCriteria == "" ? "selected" : "") ?> value="unsorted">Sorting criteria
                     </option>
