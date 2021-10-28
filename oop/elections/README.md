@@ -16,3 +16,11 @@ https://dawsonferrer.com/allabres/apis_solutions/elections/api.php?data=parties
 Mientras que para las circumscripciones podeis hacer uso de:
 
 https://dawsonferrer.com/allabres/apis_solutions/elections/api.php?data=districts
+
+Para realizar un reparto de escaños debeis tener en cuenta el funcionamiento del sistema d'hondt que podeis ver aqui:
+
+https://es.wikipedia.org/wiki/Sistema_D%27Hondt
+
+Así mismo, si quereis que el resultado sea un fiel reflejo de los resultados reales, debeis tener en cuenta
+que los partidos cuyo porcentaje de votos en una circumscripcion sea inferior al 3% seran desestimados y por lo 
+tanto no serán tenidos en cuenta en el reparto d'hondt.
