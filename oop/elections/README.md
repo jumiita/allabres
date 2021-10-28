@@ -1,5 +1,5 @@
 # Resultados electorales
-En este caso vais a tener que construir una aplicación orientada a objetos que reciba un conjunto de resultados
+En este caso vais a tener que desarrollar una aplicación orientada a objetos que reciba un conjunto de resultados
 y devuelva esos resultados estructurados a través de los diferentes objetos posibles, en una primera versión 
 simplemente debeis mostrar los resultados por provincia tal como se muestra en el siguiente enlace:
 
