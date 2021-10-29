@@ -5,6 +5,11 @@ simplemente debeis mostrar los resultados por provincia tal como se muestra en e
 
 https://dawsonferrer.com/allabres/oop/elections/index.php
 
+El resultado final debe poder ser filtrado tanto por partidos como por distritos asi como
+permitir ver un resultado general de las elecciones en el conjunto del estado. Puede comprobarse el resultado final esperado en el siguiente enlace:
+
+https://dawsonferrer.com/allabres/oop/elections/map.php
+
 El conjunto de resultados que vais a recibir va a seguir la siguiente estructura:
 
 https://dawsonferrer.com/allabres/apis_solutions/elections/api.php?data=results
