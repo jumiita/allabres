@@ -2,7 +2,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://dawsonferrer.com/allabres/ddbb/mallorcasa/styles/main.css" rel="stylesheet">
+    <link href="../styles/main.css" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -12,6 +12,9 @@
 <section class="head">
     <div class="container">
         <h2 class="text-center"><span><a href="list.php">Mallorcasa</a></span></h2>
+        <?php if (isset($_SESSION["userMail"])) { ?>
+            <h6 class="text-right"><span>Loged in as: <?php echo $_SESSION["userMail"] ?></span></h6>
+        <?php } ?>
     </div>
 </section>
 <div class="clearfix"></div>
@@ -23,7 +26,8 @@
                     <div id="property-<?php echo $property->getId(); ?>" class="media">
                         <div class="fav-box">
                             <a href="?propertyId=<?php echo $property->getId(); ?>">
-                                <i class="fa fa-map-pin " <?php echo($selectedPropertyId == $property->getId() ? "style='color:red'" : "") ?> aria-hidden="true"></i>
+                                <i class="fa fa-map-pin " <?php echo($selectedPropertyId == $property->getId() ? "style='color:red'" : "") ?>
+                                   aria-hidden="true"></i>
                             </a>
                         </div>
                         <img class="d-flex align-self-start"

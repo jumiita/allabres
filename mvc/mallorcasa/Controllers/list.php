@@ -17,6 +17,8 @@ if (isset($_GET["propertyId"])) {
     $zoom = 15;
 }
 
+session_start();
+
 require_once "../Views/listView.phtml"
 
 ?>
