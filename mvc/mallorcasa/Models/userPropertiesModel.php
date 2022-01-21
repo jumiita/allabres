@@ -1,4 +1,5 @@
 <?php
+
 include_once "../Entities/country.php";
 include_once "../Entities/state.php";
 include_once "../Entities/city.php";
@@ -8,8 +9,9 @@ include_once "../Entities/property.php";
 include_once "../Entities/user.php";
 include_once "../DB/dbo.php";
 
-class listModel
+class userPropertiesModel
 {
+
     private dbo $db;
 
     public function __construct()
@@ -17,95 +19,7 @@ class listModel
         $this->db = new dbo();
     }
 
-    public function getCountry($id): country
-    {
-        $sql = "SELECT * FROM countries WHERE id = " . $id;
-        $this->db->default();
-        $query = $this->db->query($sql);
-        $this->db->close();
-        $result = $query->fetch_assoc();
-        $return = new country($result["id"], $result["name"]);
-        return $return;
-    }
-
-    public function getState($id): state
-    {
-        $sql = "SELECT * FROM states WHERE id = " . $id;
-        $this->db->default();
-        $query = $this->db->query($sql);
-        $this->db->close();
-        $result = $query->fetch_assoc();
-        $return = new state($result["id"], $result["name"]);
-        return $return;
-    }
-
-    public function getCity($id): city
-    {
-        $sql = "SELECT * FROM cities WHERE id = " . $id;
-        $this->db->default();
-        $query = $this->db->query($sql);
-        $this->db->close();
-        $result = $query->fetch_assoc();
-        $return = new city($result["id"], $result["name"]);
-        return $return;
-    }
-
-    public function getNeighborhood($id): neighborhood
-    {
-        $sql = "SELECT * FROM neighborhoods WHERE id = " . $id;
-        $this->db->default();
-        $query = $this->db->query($sql);
-        $this->db->close();
-        $result = $query->fetch_assoc();
-        $return = new neighborhood($result["id"], $result["name"]);
-        return $return;
-    }
-
-    public function getImages($propertyId): array
-    {
-        $sql = "SELECT * FROM multimedias WHERE propertyId = " . $propertyId;
-        $this->db->default();
-        $query = $this->db->query($sql);
-        $this->db->close();
-        $return = array();
-        while ($result = $query->fetch_assoc()) {
-            $return[] = new image($result["id"], $result["propertyId"], $result["url"]);
-        }
-        return $return;
-    }
-
-    public function getproperties_deprecated(): array
-    {
-        $sql = "SELECT * FROM properties;";
-        $this->db->default();
-        $query = $this->db->query($sql);
-        $this->db->close();
-        $return = array();
-        while ($result = $query->fetch_assoc()) {
-            $return[] = new property($result["id"], $this->getCountry($result["countryId"]), $this->getState($result["stateId"]),
-                $this->getCity($result["cityId"]), $this->getNeighborhood($result["neighborhoodId"]), $result["zipcode"],
-                $result["latitude"], $result["longitude"], DateTime::createFromFormat("Y-m-d", $result["date"]), $result["description"],
-                $result["bathrooms"], $result["floor"], $result["rooms"], $result["surface"], $result["price"], $this->getImages($result["id"]));
-        }
-        return $return;
-    }
-
-    public function getproperty_deprecated($id): property
-    {
-        $sql = "SELECT * FROM properties WHERE id = " . $id;
-        $this->db->default();
-        $query = $this->db->query($sql);
-        $this->db->close();
-        $result = $query->fetch_assoc();
-        $return = new property($result["id"], $this->getCountry($result["countryId"]), $this->getState($result["stateId"]),
-            $this->getCity($result["cityId"]), $this->getNeighborhood($result["neighborhoodId"]), $result["zipcode"],
-            $result["latitude"], $result["longitude"], DateTime::createFromFormat("Y-m-d", $result["date"]), $result["description"],
-            $result["bathrooms"], $result["floor"], $result["rooms"], $result["surface"], $result["price"], $this->getImages($result["id"]));
-
-        return $return;
-    }
-
-    public function getProperties(): array
+    public function getProperties($userId): array
     {
         $sql = "SELECT cities.name as cityName, cities.id as cityId, ";
         $sql .= "countries.name as countryName, countries.id as countryId, ";
@@ -123,7 +37,7 @@ class listModel
         $sql .= "INNER JOIN neighborhoods ON properties.neighborhoodId = neighborhoods.id ";
         $sql .= "INNER JOIN states ON properties.stateId = states.id ";
         $sql .= "LEFT JOIN users ON properties.userId = users.id ";
-        $sql .= "WHERE userId IS NULL ";
+        $sql .= "WHERE userId = " . $userId . " ";
         $sql .= "GROUP BY properties.id";
 
         $properties = array();
@@ -134,9 +48,9 @@ class listModel
             $state = new state($row["stateId"], $row["stateName"]);
             $city = new city($row["cityId"], $row["cityName"]);
             $neighborhood = new neighborhood($row["neighborhoodId"], $row["neighborhoodName"]);
-            if(!is_null($row["userId"])){
+            if (!is_null($row["userId"])) {
                 $user = new user($row["userId"], $row["userMail"], $row["userPassword"]);
-            }else{
+            } else {
                 $user = new user(0, "-", "-");
             }
             $images = array();
@@ -184,9 +98,9 @@ class listModel
         $state = new state($row["stateId"], $row["stateName"]);
         $city = new city($row["cityId"], $row["cityName"]);
         $neighborhood = new neighborhood($row["neighborhoodId"], $row["neighborhoodName"]);
-        if(!is_null($row["userId"])){
+        if (!is_null($row["userId"])) {
             $user = new user($row["userId"], $row["userMail"], $row["userPassword"]);
-        }else{
+        } else {
             $user = new user(0, "-", "-");
         }
         $images = array();
@@ -202,5 +116,31 @@ class listModel
         $property = new property($row["propertyId"], $country, $state, $city, $neighborhood, $row["propertyZipcode"], $row["propertyLatitude"], $row["propertyLongitude"], $propertyDate, $row["propertyDescription"], $row["propertyBathrooms"], $row["propertyFloor"], $row["propertyRooms"], $row["propertySurface"], $row["propertyPrice"], $user, $images);
 
         return $property;
+    }
+
+    public function sellProperty($propertyId)
+    {
+        $sql = "UPDATE properties SET userId = NULL WHERE id = " . $propertyId;
+        $this->db->default();
+        $this->db->query($sql);
+        if ($this->db->affected_rows > 0) {
+            $this->db->close();
+            return true;
+        }
+        $this->db->close();
+        return false;
+    }
+
+    public function buyProperty($propertyId, $userId)
+    {
+        $sql = "UPDATE properties SET userId = " . $userId . " WHERE id = " . $propertyId;
+        $this->db->default();
+        $this->db->query($sql);
+        if ($this->db->affected_rows > 0) {
+            $this->db->close();
+            return true;
+        }
+        $this->db->close();
+        return false;
     }
 }

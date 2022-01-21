@@ -4,6 +4,7 @@ include_once "country.php";
 include_once "state.php";
 include_once "city.php";
 include_once "neighborhood.php";
+include_once "user.php";
 include_once "image.php";
 
 class property
@@ -23,6 +24,7 @@ class property
     protected int $rooms;
     protected  int $surface;
     protected int $price;
+    protected user $user;
     protected array $images;
 
     /**
@@ -41,9 +43,10 @@ class property
      * @param int $rooms
      * @param int $surface
      * @param int $price
+     * @param user $user
      * @param array $images
      */
-    public function __construct(int $id, country $country, state $state, city $city, neighborhood $neighborhood, int $zipcode, float $latitude, float $longitude, DateTime $date, string $description, int $bathrooms, int $floor, int $rooms, int $surface, int $price, array $images)
+    public function __construct(int $id, country $country, state $state, city $city, neighborhood $neighborhood, int $zipcode, float $latitude, float $longitude, DateTime $date, string $description, int $bathrooms, int $floor, int $rooms, int $surface, int $price, user $user, array $images)
     {
         $this->id = $id;
         $this->country = $country;
@@ -60,6 +63,7 @@ class property
         $this->rooms = $rooms;
         $this->surface = $surface;
         $this->price = $price;
+        $this->user = $user;
         $this->images = $images;
     }
 
@@ -189,5 +193,21 @@ class property
     public function getImages(): array
     {
         return $this->images;
+    }
+
+    /**
+     * @return user
+     */
+    public function getUser(): user
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param user $user
+     */
+    public function setUser(user $user): void
+    {
+        $this->user = $user;
     }
 }

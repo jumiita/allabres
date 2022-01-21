@@ -5,6 +5,7 @@ include_once "../Entities/city.php";
 include_once "../Entities/neighborhood.php";
 include_once "../Entities/image.php";
 include_once "../Entities/property.php";
+include_once "../Entities/user.php";
 include_once "../DB/dbo.php";
 
 class singlepropertyModel
@@ -97,7 +98,7 @@ class singlepropertyModel
         $sql .= "properties.latitude as propertyLatitude, properties.longitude as propertyLongitude, ";
         $sql .= "properties.date as propertyDate, properties.description as propertyDescription, properties.bathrooms as propertyBathrooms, ";
         $sql .= "properties.floor as propertyFloor, properties.rooms as propertyRooms, properties.surface as propertySurface, properties.price as propertyPrice, ";
-        $sql .= "states.name as stateName, states.id as stateId, ";
+        $sql .= "states.name as stateName, states.id as stateId, properties.userId as userId, users.mail as userMail, users.password as userPassword, ";
         $sql .= "(SELECT GROUP_CONCAT(CONCAT(id,',',url) SEPARATOR ';') FROM multimedias m2 WHERE m2.propertyId = properties.id) as images ";
         $sql .= "FROM properties ";
         $sql .= "INNER JOIN cities ON properties.cityId = cities.id ";
@@ -105,6 +106,7 @@ class singlepropertyModel
         $sql .= "INNER JOIN multimedias ON properties.id = multimedias.propertyId ";
         $sql .= "INNER JOIN neighborhoods ON properties.neighborhoodId = neighborhoods.id ";
         $sql .= "INNER JOIN states ON properties.stateId = states.id ";
+        $sql .= "LEFT JOIN users ON properties.userId = users.id ";
         $sql .= "WHERE properties.id = " . $propertyId . " ";
         $sql .= "GROUP BY properties.id;";
 
@@ -115,6 +117,11 @@ class singlepropertyModel
         $state = new state($row["stateId"], $row["stateName"]);
         $city = new city($row["cityId"], $row["cityName"]);
         $neighborhood = new neighborhood($row["neighborhoodId"], $row["neighborhoodName"]);
+        if(!is_null($row["userId"])){
+            $user = new user($row["userId"], $row["userMail"], $row["userPassword"]);
+        }else{
+            $user = new user(0, "-", "-");
+        }
         $images = array();
         $imagesStrArr = explode(";", $row["images"]);
         foreach ($imagesStrArr as $imageStr) {
@@ -125,7 +132,7 @@ class singlepropertyModel
 
         $propertyDate = DateTime::createFromFormat('Y-m-d', $row["propertyDate"]);
 
-        $property = new property($row["propertyId"], $country, $state, $city, $neighborhood, $row["propertyZipcode"], $row["propertyLatitude"], $row["propertyLongitude"], $propertyDate, $row["propertyDescription"], $row["propertyBathrooms"], $row["propertyFloor"], $row["propertyRooms"], $row["propertySurface"], $row["propertyPrice"], $images);
+        $property = new property($row["propertyId"], $country, $state, $city, $neighborhood, $row["propertyZipcode"], $row["propertyLatitude"], $row["propertyLongitude"], $propertyDate, $row["propertyDescription"], $row["propertyBathrooms"], $row["propertyFloor"], $row["propertyRooms"], $row["propertySurface"], $row["propertyPrice"], $user, $images);
 
         return $property;
     }
