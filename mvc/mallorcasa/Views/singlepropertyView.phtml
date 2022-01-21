@@ -16,6 +16,23 @@
 <body>
 <div class="container">
     <h2 class="text-center"><span><a href="list.php">Mallorcasa</a></span></h2>
+    <?php if (isset($_SESSION["userMail"])) { ?>
+        <div style="position: absolute; top: 10px; right:10px">
+            <h6 class="text-right"><span>Loged in as: <?php echo $_SESSION["userMail"] ?></span></h6>
+            <a href="../Controllers/logoutController.php" class="btn btn-info btn-round" role="button">
+                Logout
+            </a>
+        </div>
+    <?php } else { ?>
+        <div style="position: absolute; top: 10px; right: 10px">
+            <a href="../Controllers/loginController.php" class="btn btn-info btn-round" role="button">
+                Login
+            </a>
+            <a href="../Controllers/signupController.php" class="btn btn-info btn-round" role="button">
+                Sign up
+            </a>
+        </div>
+    <?php } ?>
 </div>
 <div class="container">
     <div class="row">
@@ -168,6 +185,9 @@
                             <span class="badge bg-primary rounded-pill"><?php echo $property->getPrice() ?>€</span>
                         </li>
                     </ul>
+                    <?php if (isset($_SESSION["userMail"])) { ?>
+                        <a href="../Controllers/userPropertiesController.php" class="btn btn-primary" style="margin-top: 20px;">Comprar</a>
+                    <?php } ?>
                 </div>
             </div>
             <br>

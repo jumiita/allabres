@@ -10,6 +10,8 @@ if (isset($_GET["id"])) {
     die("NO ID SELECTED");
 }
 
+session_start();
+
 require_once "../Views/singlepropertyView.phtml";
 
 ?>
