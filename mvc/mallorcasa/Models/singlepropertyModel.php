@@ -61,6 +61,19 @@ class singlepropertyModel
         return $return;
     }
 
+    public function getUser($id): user
+    {
+        if (!is_null($id)) {
+            $sql = "SELECT * FROM users WHERE id = " . $id;
+            $this->db->default();
+            $query = $this->db->query($sql);
+            $this->db->close();
+            $result = $query->fetch_assoc();
+            return new user($result["id"], $result["mail"], $result["password"]);
+        }
+        return new user(0, "-", "-");
+    }
+
     public function getImages($propertyId): array
     {
         $sql = "SELECT * FROM multimedias WHERE propertyId = " . $propertyId;
@@ -84,7 +97,7 @@ class singlepropertyModel
         $return = new property($result["id"], $this->getCountry($result["countryId"]), $this->getState($result["stateId"]),
             $this->getCity($result["cityId"]), $this->getNeighborhood($result["neighborhoodId"]), $result["zipcode"],
             $result["latitude"], $result["longitude"], DateTime::createFromFormat("Y-m-d", $result["date"]), $result["description"],
-            $result["bathrooms"], $result["floor"], $result["rooms"], $result["surface"], $result["price"], $this->getImages($result["id"]));
+            $result["bathrooms"], $result["floor"], $result["rooms"], $result["surface"], $result["price"], $this->getUser($result["userId"]), $this->getImages($result["id"]));
 
         return $return;
     }
@@ -117,9 +130,9 @@ class singlepropertyModel
         $state = new state($row["stateId"], $row["stateName"]);
         $city = new city($row["cityId"], $row["cityName"]);
         $neighborhood = new neighborhood($row["neighborhoodId"], $row["neighborhoodName"]);
-        if(!is_null($row["userId"])){
+        if (!is_null($row["userId"])) {
             $user = new user($row["userId"], $row["userMail"], $row["userPassword"]);
-        }else{
+        } else {
             $user = new user(0, "-", "-");
         }
         $images = array();

@@ -61,6 +61,19 @@ class listModel
         return $return;
     }
 
+    public function getUser($id): user
+    {
+        if (!is_null($id)) {
+            $sql = "SELECT * FROM users WHERE id = " . $id;
+            $this->db->default();
+            $query = $this->db->query($sql);
+            $this->db->close();
+            $result = $query->fetch_assoc();
+            return new user($result["id"], $result["mail"], $result["password"]);
+        }
+        return new user(0, "-", "-");
+    }
+
     public function getImages($propertyId): array
     {
         $sql = "SELECT * FROM multimedias WHERE propertyId = " . $propertyId;
@@ -76,7 +89,7 @@ class listModel
 
     public function getproperties_deprecated(): array
     {
-        $sql = "SELECT * FROM properties;";
+        $sql = "SELECT * FROM properties WHERE userId IS NULL;";
         $this->db->default();
         $query = $this->db->query($sql);
         $this->db->close();
@@ -85,7 +98,7 @@ class listModel
             $return[] = new property($result["id"], $this->getCountry($result["countryId"]), $this->getState($result["stateId"]),
                 $this->getCity($result["cityId"]), $this->getNeighborhood($result["neighborhoodId"]), $result["zipcode"],
                 $result["latitude"], $result["longitude"], DateTime::createFromFormat("Y-m-d", $result["date"]), $result["description"],
-                $result["bathrooms"], $result["floor"], $result["rooms"], $result["surface"], $result["price"], $this->getImages($result["id"]));
+                $result["bathrooms"], $result["floor"], $result["rooms"], $result["surface"], $result["price"], $this->getUser($result["userId"]), $this->getImages($result["id"]));
         }
         return $return;
     }
@@ -100,7 +113,7 @@ class listModel
         $return = new property($result["id"], $this->getCountry($result["countryId"]), $this->getState($result["stateId"]),
             $this->getCity($result["cityId"]), $this->getNeighborhood($result["neighborhoodId"]), $result["zipcode"],
             $result["latitude"], $result["longitude"], DateTime::createFromFormat("Y-m-d", $result["date"]), $result["description"],
-            $result["bathrooms"], $result["floor"], $result["rooms"], $result["surface"], $result["price"], $this->getImages($result["id"]));
+            $result["bathrooms"], $result["floor"], $result["rooms"], $result["surface"], $result["price"], $this->getUser($result["userId"]), $this->getImages($result["id"]));
 
         return $return;
     }
